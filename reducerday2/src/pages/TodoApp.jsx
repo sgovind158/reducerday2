@@ -1,25 +1,41 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
 import ShowComplete from '../componets/ShowComplete'
-import { deleteTodo, todoAdd, todoComplete } from '../store/actions'
+import { deleteTodo, getTodos, todoAdd, todoComplete } from '../store/actions'
 import style from "../componets/style.module.css"
+import axios from "axios"
 const TodoApp = () => {
     const dispatch = useDispatch()
-    const todos = useSelector((state)=>state.todo.todos)
+    const {data:todos,getTodos:gTodo,addTodo:aTodo} = useSelector((state)=>state.todo)
     const ref = useRef()
     let navigate = useNavigate();
+    const { loading: addButtonLoading} = useSelector(state=>state.todo.addTodo)
+
+    useEffect(()=>{
+      
+      // getTodos(dispatch)
+      dispatch(getTodos())
+   
+    },[])
    
     const addNew = ()=>{
         let value = ref.current.value;
       console.log(value)
        
-        dispatch(todoAdd({
-            value:value,
-            isCompleted:false,
-            
-        }))
-        ref.current.value = null
+      dispatch(
+        todoAdd({
+          value: value,
+          isCompleted:false,
+        })
+      )
+      ref.current.value = null
+      // todoAdd(dispatch,{
+      //   value:value,
+      //   isCompleted:false,
+      // });
+      
+       
     }
 
 
@@ -46,14 +62,20 @@ const TodoApp = () => {
       navigate(`/todo/:id/edit`);
     }
 
+    if(gTodo.loading){
+   return   <h1>LOADING</h1>
+    }else if(gTodo.error){
+   return   <h1>ERROR</h1>
+    }
+
   return (
       <>
-   
+             
       <h1>TodoApp</h1>
       
       <div>
           <input className={style.input} ref={ref} type="text" placeholder='enter here' />
-          <button onClick={addNew}  className={style.addBtn}>Add</button>
+          <button onClick={addNew}  disabled={addButtonLoading} className={style.addBtn}>Add</button>
          
       </div>
          <br />
