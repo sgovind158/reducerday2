@@ -1,24 +1,99 @@
-import { ADD_TODO, COMPLETE_TODO, DELETE_TODO, UPDATE_TODO } from "./action.types"
+import { ADD_TODO, ADD_TODOS_ERROR, ADD_TODOS_LOADING, ADD_TODOS_SUCCESS, COMPLETE_TODO, DELETE_TODO, GET_TODOS, GET_TODOS_ERROR, GET_TODOS_LOADING, GET_TODOS_SUCCESS, UPDATE_TODO } from "./action.types"
 import { v4 as uuidv4 } from 'uuid';
 
+const initState = {
+    addTodo:{
+        loading : false,
+       
+       error:false,
+
+    },
+    getTodos:{
+        loading : false,
+        error:false,
+       
+    },
+    data: [],
+}
 
 
-
-export const todoReducer = (state = {todos : []}, {type,payload})=>{
+export const todoReducer = (state = initState, {type,payload})=>{
  
     switch(type){
+
+        case GET_TODOS_LOADING:{
+            return{
+                ...state,
+               getTodos:{
+                 
+                   loading :true,
+                   error:false,
+               }
+            }
+        }
+
+        case GET_TODOS_SUCCESS:{
+            return{
+                ...state,
+                getTodos:{
+                    ...state.getTodos,
+                    loading :false,
+                    error:false,
+                  
+                },
+                data:payload
+        }
+        }
+        case GET_TODOS_ERROR:{
+            return{
+                ...state,
+                getTodos:{
+                 
+                    loading :false,
+                    error:true,
+                }
+            }
+        }
+
+
+        case ADD_TODOS_LOADING:{
+            return{
+                ...state,
+               addTodo:{
+                  
+                   loading :true,
+                   error:false
+               }
+            }
+        }
+
+        case ADD_TODOS_SUCCESS:{
+            return{
+                ...state,
+                addTodo:{
+                    loading :false,  
+                    error:false  
+                },
+                data: [...state.data,payload],
+        }
+        }
+        case ADD_TODOS_ERROR:{
+            return{
+                ...state,
+                addTodo:{
+                  
+                    loading :false ,
+                    error:true,
+                }
+            }
+        }
+
+
         case ADD_TODO:{
         
           return{
               ...state,
-              todos:[
-                  ...state.todos,{
-                      ...payload,
-                      id: uuidv4(),
-                    
-                    
-                  },
-              ],
+              todos:[  ...state.todos,  payload],
           }
          
         }
