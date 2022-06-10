@@ -13,7 +13,6 @@ const ShowComplete = () => {
        
       
        <div className={style.showComplete} key={todo.id} >{todo.isCompleted ? todo.value : ""}</div>
-      
        
          )
   
