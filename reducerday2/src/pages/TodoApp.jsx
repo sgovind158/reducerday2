@@ -2,13 +2,15 @@ import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
 import ShowComplete from '../componets/ShowComplete'
-import { deleteTodo, getTodos, todoAdd, todoComplete } from '../store/actions'
+import { deleteTodo, getTodos, todoAdd, todoComplete, updateTodo } from '../store/actions'
 import style from "../componets/style.module.css"
 import axios from "axios"
+import { useState } from 'react'
 const TodoApp = () => {
     const dispatch = useDispatch()
     const {data:todos,getTodos:gTodo,addTodo:aTodo} = useSelector((state)=>state.todo)
     const ref = useRef()
+   const [upDate,setUpDate] = useState("")
     let navigate = useNavigate();
     const { loading: addButtonLoading} = useSelector(state=>state.todo.addTodo)
 
@@ -48,7 +50,7 @@ const TodoApp = () => {
 
    
     const toggleTaskStatus = (id,todo)=>{
-      console.log(id,todo)
+      console.log(id,todo,"**")
       dispatch(todoComplete(id))
       // let toggleTask = {
       //   ...task,
@@ -58,8 +60,13 @@ const TodoApp = () => {
       // handleUpdateTask(toggleTask)
     }
 
-    const  EditTodo = (id)=>{
-      navigate(`/todo/:id/edit`);
+    
+    const  EditTodo = (id,upDate)=>{
+      // let value =upDateRef.current.value;
+      
+      // console.log(upDate,"up",id)
+      // navigate(`/todo/:id/edit`);
+      dispatch(updateTodo({id,upDate}))
     }
 
     if(gTodo.loading){
@@ -84,12 +91,16 @@ const TodoApp = () => {
 
       {
        todos.map((todo)=>{
-
+      //  console.log(todos)
         return (
           <div className={style.showTodo} key={ todo.id}>
           <div   style={{ textDecoration: todo.isCompleted ? 'line-through' : 'none'}}>{todo.value}</div>
           <button  className={style.addBtn} onClick={()=>deleteTodoData(todo.id)}>Delete</button>
-          <button  className={style.addBtn} onClick={()=>EditTodo(todo.id)}>Edit</button>
+          <div>
+            <input type="text"  value={upDate} onChange={(e)=>setUpDate(e.target.value)}  placeholder='update'  />
+          <button  className={style.addBtn} onClick={()=>EditTodo(todo.id,upDate)} >Edit</button>
+          </div>
+         
         
         {/* compete task logic */}
         <input type="checkbox" className={style.checkBox}  checked = {todo.isCompleted} onChange ={()=>toggleTaskStatus(todo.id,todo)}  style={{ textDecorationLine: 'line-through' }} />

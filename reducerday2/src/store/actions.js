@@ -22,9 +22,9 @@ export const getTodos = ()=>(dispatch)=>{
       .then((res)=>{
           // loading ends 
         // console.log(res.data)
-       setTimeout(()=>{
+    //    setTimeout(()=>{
         dispatch({type : GET_TODOS_SUCCESS , payload: res.data})
-       },5000)
+    //    },5000)
       
       }).catch(()=>{
           // loading ends
@@ -42,6 +42,72 @@ export const todoAdd = (payload)=> (dispatch)=>{
     })
 }
 
-export const todoComplete = (id)=>({type : COMPLETE_TODO , payload: id})
-export const deleteTodo = (id)=>({type : DELETE_TODO , payload: id})
-export const updateTodo = (payload)=>({type : UPDATE_TODO, payload})
+export const todoComplete = (id)=>(dispatch)=>{
+
+    // const {id,  upDate} = payload;
+    axios.put(`http://localhost:8081/todos/${id}/`, {
+     isCompleted:true
+}).then(res => {
+    
+    console.log(res.data);
+}).catch(error => {
+
+    console.log(error);
+});
+
+
+dispatch({type : UPDATE_TODO, payload:id})
+}
+
+
+export const deleteTodo = (id)=>(dispatch)=>{
+    console.log(id,"delete")
+    axios.delete(`http://localhost:8081/todos/${id}/`)
+    .then(resp => {
+        console.log(resp.data,"updeteDel")
+    }).catch(error => {
+        console.log(error);
+    });
+
+  dispatch({type : DELETE_TODO , payload: id})
+    }
+
+
+export const updateTodo = (payload)=>(dispatch)=>{
+    // console.log("update",payload)
+    const {id,  upDate} = payload;
+    // console.log(id,upDate)
+
+    axios.put(`http://localhost:8081/todos/${id}/`, {
+    value:upDate
+}).then(res => {
+    console.log(res);
+    // dispatch({type : GET_TODOS_SUCCESS , payload: res.data})
+   
+}).catch(error => {
+
+    console.log(error);
+});
+
+
+dispatch({type : UPDATE_TODO, payload})
+}
+
+
+
+export const showCompleteTask = (payload)=>(dispatch)=>{
+
+    const {id,  upDate} = payload;
+    axios.put(`http://localhost:8081/todos/${id}/`, {
+     isCompleted:true
+}).then(res => {
+    
+    console.log(res.data);
+}).catch(error => {
+
+    console.log(error);
+});
+
+
+dispatch({type : UPDATE_TODO, payload})
+}

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import style from "./style.module.css"
 const ShowUnComplete = () => {
     const dispatch = useDispatch()
-    const todos = useSelector((state)=>state.todo.todos)
+    const {data:todos,getTodos:gTodo,addTodo:aTodo} = useSelector((state)=>state.todo)
   return (
     <div>
       <h1>show complete</h1>

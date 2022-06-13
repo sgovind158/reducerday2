@@ -4,7 +4,7 @@ import { updateTodo } from '../store/actions'
 
 const EditPage = () => {
     const dispatch = useDispatch()
-    const todos = useSelector((state)=>state.todo.todos)
+    const {data:todos,getTodos:gTodo,addTodo:aTodo} = useSelector((state)=>state.todo)
     const ref = useRef()
 
     const editNew = ()=>{
