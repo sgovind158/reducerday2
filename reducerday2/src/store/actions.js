@@ -45,9 +45,8 @@ export const todoAdd = (payload)=> (dispatch)=>{
 export const todoComplete = (id)=>(dispatch)=>{
 
     // const {id,  upDate} = payload;
-    axios.put(`http://localhost:8081/todos/${id}/`, {
-     isCompleted:true
-}).then(res => {
+    axios.get(`http://localhost:8081/todos/${id}/`,).then(res => {
+        dispatch({type:COMPLETE_TODO ,payload:id})
     
     console.log(res.data);
 }).catch(error => {
@@ -56,7 +55,7 @@ export const todoComplete = (id)=>(dispatch)=>{
 });
 
 
-dispatch({type : UPDATE_TODO, payload:id})
+// dispatch({type : UPDATE_TODO, payload:id})
 }
 
 
@@ -75,22 +74,37 @@ export const deleteTodo = (id)=>(dispatch)=>{
 
 export const updateTodo = (payload)=>(dispatch)=>{
     // console.log("update",payload)
-    const {id,  upDate} = payload;
+    const {id,  value} = payload;
     // console.log(id,upDate)
 
     axios.put(`http://localhost:8081/todos/${id}/`, {
-    value:upDate
+    value:value
 }).then(res => {
     console.log(res);
-    // dispatch({type : GET_TODOS_SUCCESS , payload: res.data})
+    axios.get("http://localhost:8081/todos")
+.then((res)=>{
    
-}).catch(error => {
+  dispatch({type : GET_TODOS_SUCCESS , payload: res.data})
+
+
+}).catch(()=>{
+    // loading ends
+    dispatch({type : GET_TODOS_ERROR })
+})
+    // dispatch({type : GET_TODOS_SUCCESS , payload: res.data})
+    // dispatch({type : UPDATE_TODO, payload})
+   
+})
+
+.catch(error => {
 
     console.log(error);
 });
 
 
-dispatch({type : UPDATE_TODO, payload})
+
+
+
 }
 
 

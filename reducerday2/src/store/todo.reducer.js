@@ -101,22 +101,20 @@ export const todoReducer = (state = initState, {type,payload})=>{
         case UPDATE_TODO:{
             
             let newTodos = state.data.map((todo)=>{
-                console.log(payload,"before",state.data)
+                // console.log(payload,"before",state.data)
                 let newData = state.data
                 if(todo.id ===payload.id){
 
-                    return {  newData
-                       
-                    }
+                  
                     return{
                           ...state,
                         data:[
                             ...state.data   ,{
-                                ...payload  ,
-                                id: uuidv4(),
-                              
-                              
-                            },
+                              ...payload,
+                              value: payload.value
+                            }
+                            
+                                  
                         ],
                    
                      }
@@ -126,7 +124,7 @@ export const todoReducer = (state = initState, {type,payload})=>{
                 
              }
             })
-            console.log(newTodos,"this is new todos")
+            // console.log(newTodos,"this is new todos")
             return { ...state,data: newTodos}
         }
 
@@ -147,6 +145,7 @@ export const todoReducer = (state = initState, {type,payload})=>{
         }
 
         case COMPLETE_TODO:{
+            console.log(state.data,"array")
             let newTodos = state.data.map((todo)=>{
                 if(todo.id === payload){
                     if(todo.isCompleted === false){

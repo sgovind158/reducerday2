@@ -10,7 +10,7 @@ const TodoApp = () => {
     const dispatch = useDispatch()
     const {data:todos,getTodos:gTodo,addTodo:aTodo} = useSelector((state)=>state.todo)
     const ref = useRef()
-   const [upDate,setUpDate] = useState("")
+   const [value,setUpDate] = useState("")
     let navigate = useNavigate();
     const { loading: addButtonLoading} = useSelector(state=>state.todo.addTodo)
 
@@ -61,12 +61,12 @@ const TodoApp = () => {
     }
 
     
-    const  EditTodo = (id,upDate)=>{
+    const  EditTodo = (id,value)=>{
       // let value =upDateRef.current.value;
       
       // console.log(upDate,"up",id)
       // navigate(`/todo/:id/edit`);
-      dispatch(updateTodo({id,upDate}))
+      dispatch(updateTodo({id,value}))
     }
 
     if(gTodo.loading){
@@ -97,8 +97,9 @@ const TodoApp = () => {
           <div   style={{ textDecoration: todo.isCompleted ? 'line-through' : 'none'}}>{todo.value}</div>
           <button  className={style.addBtn} onClick={()=>deleteTodoData(todo.id)}>Delete</button>
           <div>
-            <input type="text"  value={upDate} onChange={(e)=>setUpDate(e.target.value)}  placeholder='update'  />
-          <button  className={style.addBtn} onClick={()=>EditTodo(todo.id,upDate)} >Edit</button>
+          {todo.isCompleted}
+            <input type="text"  value={value} onChange={(e)=>setUpDate(e.target.value)}  placeholder='update'  />
+          <button  className={style.addBtn} onClick={()=>EditTodo(todo.id,value)} >Edit</button>
           </div>
          
         
